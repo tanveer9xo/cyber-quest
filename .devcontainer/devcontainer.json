@@ -1,6 +1,6 @@
 {
   "name": "Local PySpark",
-  "image": "spark:python3-java17",
+  "image": "apache/spark:4.0.3-scala2.13-java17-python3-r-ubuntu",
   "remoteUser": "root",
   "customizations": {
     "vscode": {
