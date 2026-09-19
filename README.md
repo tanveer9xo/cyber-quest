@@ -103,3 +103,13 @@ You ***may*** use AI as a reference tool but there will be a strong expectation 
 - Running SQL Queries Programmatically: [See Getting Started Docs](https://spark.apache.org/docs/latest/sql-getting-started.html#running-sql-queries-programmatically)
 
 </details>
+
+## Quest Summary
+
+**Methodology:**
+1. **Data Parsing:** Extracted key fields (`Computer`, `EventCode`, `Image`, `QueryName`, `UtcTime`, `ProcessId`) from raw Sysmon JSON logs using PySpark's `get_json_object` to create a clean, usable dataframe.
+2. **Detection Engineering:** Built a detection query targeting Event Code 22 (DNS queries). I filtered the data for Microsoft Office applications (`winword.exe`, `excel.exe`, `powerpnt.exe`) to test the phishing hypothesis. This isolated an anomalous query from `WINWORD.EXE` to `www.mediafire.com`, strongly indicating a malicious document attempting to download a secondary payload.
+3. **Normalization & Alerting:** Normalized the resulting dataframe to the Elastic Common Schema (ECS) (e.g., mapping `Computer` to `host.name`). I then utilized a PySpark UDF to simulate Threat Intelligence enrichment, flagging the file-sharing domain as malicious, and packaged the data into an actionable alert with MITRE ATT&CK mapping (T1566.001).
+
+**AI Usage Disclosure:**
+I utilized AI as a reference and pair-programming tool during this exercise. It primarily helped with setting up the local Mac environment (troubleshooting Java 17 pathing and PySpark localhost binding). Additionally, it served as a syntax reference for PySpark UDF creation and for troubleshooting an unresolved column error caused by dots in the ECS schema names.
